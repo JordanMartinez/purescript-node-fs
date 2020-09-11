@@ -81,6 +81,7 @@ fs ::
   , utimes :: Fn4 FilePath Int Int (JSCallback Unit) Unit
   , readFile :: forall a opts. Fn3 FilePath { | opts } (JSCallback a) Unit
   , writeFile :: forall a opts. Fn4 FilePath a { | opts } (JSCallback Unit) Unit
+  , copyFile :: Fn3 FilePath FilePath (JSCallback Unit) Unit
   , appendFile :: forall a opts. Fn4 FilePath a { | opts } (JSCallback Unit) Unit
   , exists :: forall a. Fn2 FilePath (Boolean -> a) Unit
   , open :: Fn4 FilePath String (Nullable FileMode) (JSCallback FileDescriptor) Unit
@@ -302,6 +303,16 @@ appendTextFile ::  Encoding
 
 appendTextFile encoding file buff cb = mkEffect $ \_ -> runFn4
   fs.appendFile file buff { encoding: show encoding } (handleCallback cb)
+
+-- | Makes a new directory with the specified permissions.
+copyFile :: FilePath
+         -> FilePath
+         -> Callback Unit
+         -> Effect Unit
+
+copyFile fromPath toPath cb = mkEffect $ \_ -> runFn3
+  fs.copyFile fromPath toPath (handleCallback cb)
+
 
 -- | Check if the path exists.
 exists :: FilePath
