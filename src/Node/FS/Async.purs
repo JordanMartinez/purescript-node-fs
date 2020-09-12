@@ -22,6 +22,7 @@ module Node.FS.Async
   , writeFile
   , writeTextFile
   , appendFile
+  , copyFile
   , appendTextFile
   , exists
   , fdOpen
